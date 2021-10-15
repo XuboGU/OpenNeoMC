@@ -6,7 +6,7 @@
 
 In this project(OpenNeoMC), we dedicated to combine these two open source tools(OpenMC and NEORL) to empower nuclear physics with the state-of-the-art optimization techniques. We will firstly provide users with easy ways to install the framework that combine NEORL with OpenMC, and a simple example is available to test the framework. Then we offer two practical engineering optimization applications in nuclear physics. More applications that involve both optimization and nuclear physics will be added in the future. We highly welcome users and researchers in nuclear area to contribute OpenNeoMC and solve engineering problems in this framework.
 
-## Installing on Linux/Mac with conda
+## Installing OpenNeoMC on Linux/Mac with conda
 
 ### Install OpenMC
 
@@ -53,8 +53,6 @@ source ~/.bashrc
 
 ```
 
-
-
 ### Install NEORL
 
 Install python 3.7 to make sure the stable run of tensorflow-1.14.0 
@@ -67,9 +65,13 @@ conda install python=3.7
 pip install neorl==1.6
 ```
 
-Change the scikit-learn version to 0.24.2
+Chcek the version of sciki-learn, if it is 1.x, downgrade the scikit-learn version to 0.24.2
 
 ```shell
+# check version
+python -c 'import sklearn; print(sklearn.__version__)'
+
+# downgrade the sklearn version
 pip install scikit-learn==0.24.2
 ```
 
@@ -87,11 +89,45 @@ neorl --test
 
 
 
-## Installing with Docker on Linux/Mac/Windows 
+## Installing OpenNeoMC with Docker on Linux/Mac/Windows 
 
+**OpenNeoMC docker image: link**  
 
+Installing OpenNeoMC with docker is highly recommended! In this way you need not to worry about issues like cross section data and software compatibility etc. All you need to do are simply pull the image and run it.   
+
+Pull docker images from dockhub:  `sudo docker pull openmc/openmc:latest`
+
+Check the openmc docker images:  `sudo docker images`
+
+Run the openmc images: `sudo docker run -tid --shm-size=8G --gpus all --name openmc -v ../:/workspace/ -p 90:22 openmc/openmc`
+
+Execute the container:  `sudo docker exec -it openmc /bin/bash`
+
+**Other commonly used commands** 
+
+Exit the container: `exit`
+
+Stop the container:  `sudo docker stop openmc`
+
+Restart the container: `sudo docker start openmc`
+
+Delete the container: `sudo docker rm openmc`
+
+Delete the image(remove the container first):  `sudo docker image rm openmc`
+
+## Eaxmple 
+
+Let's test the framwork by the pin_cell_test.py 
+
+## Reference
+
+OpenMC: https://docs.openmc.org/en/stable
+
+OpenMC docker image: https://hub.docker.com/r/openmc/openmc
+
+NEORL: https://neorl.readthedocs.io/en/latest/
 
 ## Contact 
 
-If you have any suggestions or issues, please feel free to contact Xubo Gu(guxubo@alumni.sjtu.edu.cn)
+If you have any suggestions or issues, please feel free to contact Xubo Gu(xbgu1024@126.com)
 
