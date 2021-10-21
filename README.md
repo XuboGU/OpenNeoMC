@@ -1,18 +1,20 @@
-## OpenNeoMC
+# OpenNeoMC：an Open-source Tool for Particle Transport Optimization that Combining OpenMC with NEORL
 
-[OpenMC](https://docs.openmc.org/en/stable/index.html) is a community-developed Monte Carlo neutron and photon transport simulation code for nuclear research. OpenMC was originally developed by members of the [Computational Reactor Physics Group](http://crpg.mit.edu/) at the [Massachusetts Institute of Technology](https://web.mit.edu/) starting in 2011
+[OpenMC](https://docs.openmc.org/en/stable/index.html) is a community-developed Monte Carlo neutron and photon transport simulation code for particle transport. OpenMC was originally developed by members of the [Computational Reactor Physics Group](http://crpg.mit.edu/) at the [Massachusetts Institute of Technology](https://web.mit.edu/) starting in 2011.
 
 [NEORL](https://neorl.readthedocs.io/en/latest/index.html) (**N**euro**E**volution **O**ptimization with **R**einforcement **L**earning) is a set of implementations of hybrid algorithms combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intelligence architectures. NEORL aims to solve large-scale optimization problems relevant to operation & optimization research, engineering, business, and other disciplines. NEORL was established in MIT back in 2020 with feedback, validation, and usage of different colleagues. 
 
-In this project(OpenNeoMC), we are dedicated to combining these two open-source tools(OpenMC and NEORL) to empower nuclear physics with state-of-the-art optimization techniques. We will firstly provide users with easy ways to install the framework that combines NEORL with OpenMC, and a simple example is available to test the framework. Then we offer two practical engineering optimization applications in nuclear physics. More applications that involve both optimization and nuclear physics will be added in the future. We highly welcome users and researchers in the nuclear area to contribute OpenNeoMC and solve engineering problems in this framework.
+In OpenNeoMC, we combine these two open-source tools to empower particle transport with state-of-the-art optimization techniques. We firstly provide users with easy ways to install the framework that combines NEORL with OpenMC, and a simple example is available to test the framework. Then we offer two practical engineering optimization applications in nuclear physics. More applications that involve both optimization and nuclear physics will be added in the future. We highly welcome users and researchers in the nuclear area to contribute OpenNeoMC and solve engineering problems in this framework.
 
-## Installing OpenNeoMC on Linux/Mac with conda
+## Installing OpenNeoMC
 
-### Install Conda
+### Installation on Linux/Mac with conda
 
-Please install conda before proceeding,  it will bring you convenience to install [anaconda](https://www.anaconda.com/products/individual#Downloads) directly, which includes conda and other necessary python scientific calculation and analysis packages.
+#### Install Conda
 
-### Install OpenMC
+Please install conda before proceeding,  it will bring you convenience to install [anaconda](https://www.anaconda.com/products/individual#Downloads) directly, which includes conda and other necessary python  packages.
+
+#### Install OpenMC
 
 ```shell
 conda config --add channels conda-forge
@@ -31,30 +33,31 @@ Follow with the [official examples]( https://docs.openmc.org/en/stable/examples/
 
 **Cross Section Configuration**
 
-You may encounter the [no cross_sections.xml error]( https://github.com/openmc-dev/openmc/issues/1855) when running OpenMC. This is caused by the missing of nuclear data, you could solve this by [Cross Section Configuration](https://docs.openmc.org/en/stable/usersguide/cross_sections.html)
+You may encounter the [no cross_sections.xml error]( https://github.com/openmc-dev/openmc/issues/1855) when running OpenMC. This is caused by the missing of nuclear data, you could solve it refer to [Cross Section Configuration](https://docs.openmc.org/en/stable/usersguide/cross_sections.html)
 
 **Download cross section data**
 
-Various cross section data are available on the [official website](https://openmc.org/data-libraries/), from the OpenMC team, LANL etc. Download one version you need, and then configure it as an environmental variable as follows
+Various cross section data are available on the  [OpenMC official website](https://openmc.org/data-libraries/), from the OpenMC team, LANL, etc. In OpenNeoMC, we use [ENDF/B-VII.1](ENDF/B-VII.1) in default. But if you have specific purpose, you can use other data that you need. 
+
+After downloading the cross-section data file, configure it as an environmental variable as follows. 
 
 **Add environmental variables**
 
 ```shell
-## in python
+## Temporary methods
+# in python
 import os
-os.environ['OPENMC_CROSS_SECTIONS'] = '../cross_sections.xml'
-
-## in shell
+os.environ['OPENMC_CROSS_SECTIONS'] = '/PATH/cross_sections.xml'
+# in shell
 export OPENMC_CROSS_SECTIONS=../cross_sections.xml
 
-## in shell you can modify the ~/.bashrc to configure environmental variables automatically
+## Once for all: you can modify the ~/.bashrc to configure environmental variables
 # open ~/.bashrc
 vim ~/.bashrc
 # add the following command in the end 
-export OPENMC_CROSS_SECTIONS=../cross_sections.xml
+export OPENMC_CROSS_SECTIONS=/PATH/cross_sections.xml
 # update 
 source ~/.bashrc
-
 ```
 
 ### Install NEORL
@@ -75,37 +78,60 @@ Check the version of sciki-learn, if it is 1.x, downgrade the scikit-learn versi
 # check version
 python -c 'import sklearn; print(sklearn.__version__)'
 
-# downgrade the sklearn version
+# downgrade the sklearn version if necessary
 pip install scikit-learn==0.24.2
 ```
 
 Check if you have install NEORL successfully by unit test.
 
 ```SHELL
-neorl --test
+neorl
 ```
 
-If you pass all the tests, then congratulations! You have prepared the combined framework of OpenMC and NEORL. Enjoy using the framework to do optimization for nuclear physics research purposes!
+If you see the 'NEORL' logo, then you have prepared the OpenNeoMC framework, congratulations! 
 
-## Installing OpenNeoMC with Docker on Linux/Mac/Windows 
+#### Test OpenNeoMC
 
-**OpenNeoMC docker image: will be pushed soon!**  
+Let's test OpenNeoMC by the  'pin_cell_test.py' example. 
 
-Installing OpenNeoMC with docker is highly recommended! In this way, you need not worry about issues like cross-section data and software compatibility, etc. All you need to do are simply pull the image and run it.  
+Remember to configure environmental variables as above! 
+
+```shell
+# run 
+python pin_cell_test.py
+```
+
+If you see the 'NEORL' logo and the log information of OpenMC, then congratulations! 
+
+### Installing OpenNeoMC with Docker on Linux/Mac/Windows 
+
+Installing OpenNeoMC with docker is highly recommended! In this way, you need not worry about issues like cross-section data and software compatibility, etc. All you need to do are simply pull the image and run it in your own machine with any OS.  
+
+#### Install Docker
+
+Follow the official tutorial to Install docker on your machine:   [get docker](https://docs.docker.com/get-docker/)
+
+#### Install OpenNeoMC
+
+After installing docker, your can easily install use OpenNeoMC framework within only four steps: 
 
 ```shell
 # Pull docker images from dock hub  
-sudo docker pull openmc/openmc:latest
+sudo docker pull 489368492/openneomc
 
 # Check the openmc docker images
 sudo docker images
 
-# Run the openmc images
-sudo docker run -tid --shm-size=8G --gpus all --name openmc -v ../:/workspace/ -p 90:22 openmc/openmc
+# Run the openmc images to create container named `openneomc`
+sudo docker run -tid --shm-size=8G --gpus all --name openneomc -v /LocalWorkingDir/:/workspace/ 489368492/openneomc
 
 # Execute the container
-sudo docker exec -it openmc /bin/bash
+sudo docker exec -it openneomc /bin/bash
 ```
+
+Note: in `docker run` step, the `-v` flag mounts the current working directory into the container, which is very convenient for users. 
+
+Please refer to  [Docker CLI](https://docs.docker.com/engine/reference/commandline/run/) for docker command-line descriptions.
 
 **Other commonly used commands** 
 
@@ -114,29 +140,57 @@ sudo docker exec -it openmc /bin/bash
 exit
 
 # Stop the container
-sudo docker stop openmc
+sudo docker stop openneomc
 
-# Restart the container
-sudo docker start openmc
+# Start the container
+sudo docker start openneomc
 
 # Delete the container
-sudo docker rm openmc
+sudo docker rm openneomc
 
 # Delete the image(remove the container first)
-sudo docker image rm openmc
+sudo docker image rm 489368492/openneomc
 ```
 
-## Eaxmple 
+#### Test OpenNeoMC 
 
-Let's test the framwork by the pin_cell_test.py 
+Let's test OpenNeoMC by the  'pin_cell_test.py' example, which can be found at /home
+
+```shell
+# cd /home
+cd /home
+
+# run 
+python pin_cell_test.py
+```
+
+If you see the 'NEORL' logo and the log information of OpenMC, then congratulations! 
+
+The program runs around 3 minutes(may vary depending on your CPU), and the results are like:
+
+```python
+------------------------ JAYA Summary --------------------------
+Best fitness (y) found: 0.0015497217274231812
+Best individual (x) found: [2.01355604]
+--------------------------------------------------------------
+---JAYA Results---
+x: [2.01355604]
+y: 0.0015497217274231812
+JAYA History:
+ [0.018311916874464318, 0.0017114252626817539, 0.0017114252626817539, 0.0017114252626817539, 0.0015497217274231812]
+running time:
+ 155.2281835079193
+```
 
 ## Reference
 
 OpenMC: https://docs.openmc.org/en/stable
 
-OpenMC docker image: https://hub.docker.com/r/openmc/openmc
+OpenMC image: https://hub.docker.com/r/openmc/openmc
 
 NEORL: https://neorl.readthedocs.io/en/latest/
+
+OpenNeoMC image: https://hub.docker.com/r/489368492/openneomc 
 
 ## Contact 
 
