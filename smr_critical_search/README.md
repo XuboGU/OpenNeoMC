@@ -18,21 +18,21 @@ Below is an axial x-z slice of the SMR core, we could see various kinds of assem
 
 ### Core Structure and Assembles
 
-In this case, we design the SMR with 4 regulating groups of control rod bank (bank A, B, C and D), which is shown as follows. The most outside of the core is the reflector, and the inner ring are the in-core instrumentation assembles, then the regulation control rod back groups and the burnable absorber assembles, finally, in the center is the in-core instrumentation assembly.  
+In this case, we design the SMR with 4 regulating groups of control rod banks (bank A, B, C, and D), which is shown as follows. The most outside of the core are the reflector, and the inner ring is the in-core instrumentation assembles, then the regulation control rod back groups and the burnable absorber assemblies, finally, in the center is the in-core instrumentation assembly.  
 
 <img src='.\pics\radial_xy_slice_demonstration.png' width='120%' height='120%' alt='axial_xz_slice' align=middle />
 
 
 
-### Search Goal 
+### Search Objective 
 
-To achieve the critical condition, we have to find a combination insertion depth for the 4 groups of the control rod banks. For every group of the control rod bank, the insertion depth can vary from 0 to 359.634 centimeters, thus, we have to determine the insertion depth for each control rod bank group from this range. In practical, the insertion depth is discrete (about 228 steps in SMR), but in this case we regard it as a **continuous** problem, which is more accurate.
+To achieve the critical condition, we have to find a combination insertion depth for the 4 groups of the control rod banks. For every group of the control rod bank, the insertion depth can vary from 0 to 359.634 centimeters, thus, we have to determine the insertion depth for each control rod bank group from this range. In the reality, the insertion depth is discrete (about 228 steps in SMR), but in this case, we regard it as a **continuous** problem, which provides with more accurate solution.
 
 ### Method
 
-Here we call the [JAYA](https://neorl.readthedocs.io/en/latest/modules/jaya.html?highlight=JAYA) and [Deferential Evolutionary](https://neorl.readthedocs.io/en/latest/modules/de.html) algorithms to find the optimal UO2 enrichment.
+Here we call the [JAYA](https://neorl.readthedocs.io/en/latest/modules/jaya.html?highlight=JAYA) and [Deferential Evolutionary](https://neorl.readthedocs.io/en/latest/modules/de.html)  algorithms from NEORL to find an excellent solution.
 
-Some key parameters of the program are:
+Some key parameters are set as:
 
 ```python
 # OpenMC
@@ -46,9 +46,7 @@ Generation of the optimization algoritm: 30
 Random seed: 100
 ```
 
-
-
-
+Follows the complete code:
 
 ```python
 import numpy as np
@@ -142,7 +140,6 @@ print('---DE Results---', )
 print('x:', x_best)
 print('y:', y_best)
 print('DE History:\n', de_hist)
-
 ```
 
 ### Results
@@ -167,7 +164,12 @@ DE History:
 
 <img src='.\pics\jaya and de compare.png' width='60%' height='60%' align=middle />
 
-After searching for 30 generations , JAYA found the best combination of control rod insertion depths is [281.16951924 334.89014362  90.18330327 299.00796372], and its absolute error is 6.63e-06(with the goal k-eff=1.0), while DE find combination is [32.51209409591024, 359.634, 141.91959001818773, 355.32843192667775] whose absolute eoor is 1.98e-05.  Also, JAYA has a high search efficiency during the search process, the result is pretty good in generation 8.  
+After searching for 30 generations: 
+
+* JAYA found the best combination of control rod insertion depths is [281.16951924 334.89014362  90.18330327 299.00796372], and its absolute error is 6.63e-06(with the goal k-eff=1.0)
+* DE find combination is [32.51209409591024, 359.634, 141.91959001818773, 355.32843192667775] whose absolute eoor is 1.98e-05
+
+JAYA has a high search efficiency during the search process, for the result in generation 8 is already pretty good.  
 
 
 
