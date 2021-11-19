@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plots>
+  <!--radial slice -->
+  <plot basis="xy" color_by="material" filename="radial_xy_slice" id="1" type="slice">
+    <origin>0.0 0.0 141.61599999999999</origin>
+    <width>268.79549999999995 268.79549999999995</width>
+    <pixels>1000 1000</pixels>
+    <background>255 255 255</background>
+    <color id="1" rgb="255 218 185" />
+    <color id="2" rgb="255 255 255" />
+    <color id="3" rgb="101 101 101" />
+    <color id="5" rgb="0 0 0" />
+    <color id="6" rgb="0 0 0" />
+    <color id="7" rgb="201 201 201" />
+    <color id="9" rgb="255 0 0" />
+    <color id="10" rgb="198 226 255" />
+    <color id="11" rgb="0 255 0" />
+    <color id="12" rgb="142 35 35" />
+    <color id="13" rgb="255 215 0" />
+    <color id="14" rgb="0 0 128" />
+  </plot>
+  <!--axial slice-->
+  <plot basis="xz" color_by="material" filename="axial_xz_slice" id="2" type="slice">
+    <origin>0.0 0.0 141.61599999999999</origin>
+    <width>266.7 283.23199999999997</width>
+    <pixels>1000 1000</pixels>
+    <background>255 255 255</background>
+    <color id="1" rgb="255 218 185" />
+    <color id="2" rgb="255 255 255" />
+    <color id="3" rgb="101 101 101" />
+    <color id="5" rgb="0 0 0" />
+    <color id="6" rgb="0 0 0" />
+    <color id="7" rgb="201 201 201" />
+    <color id="9" rgb="255 0 0" />
+    <color id="10" rgb="198 226 255" />
+    <color id="11" rgb="0 255 0" />
+    <color id="12" rgb="142 35 35" />
+    <color id="13" rgb="255 215 0" />
+    <color id="14" rgb="0 0 128" />
+  </plot>
+  <!--assembly grid spacer-->
+  <plot basis="xy" color_by="material" filename="assm_grid_spacer" id="3" type="slice">
+    <origin>0.0 0.0 95.0</origin>
+    <width>32.25546 32.25546</width>
+    <pixels>2000 2000</pixels>
+    <background>255 255 255</background>
+    <color id="1" rgb="255 218 185" />
+    <color id="2" rgb="255 255 255" />
+    <color id="3" rgb="101 101 101" />
+    <color id="5" rgb="0 0 0" />
+    <color id="6" rgb="0 0 0" />
+    <color id="7" rgb="201 201 201" />
+    <color id="9" rgb="255 0 0" />
+    <color id="10" rgb="198 226 255" />
+    <color id="11" rgb="0 255 0" />
+    <color id="12" rgb="142 35 35" />
+    <color id="13" rgb="255 215 0" />
+    <color id="14" rgb="0 0 128" />
+  </plot>
+  <!--assembly no spacer-->
+  <plot basis="xy" color_by="material" filename="assm_no_spacer" id="4" type="slice">
+    <origin>0.0 0.0 90.0</origin>
+    <width>32.25546 32.25546</width>
+    <pixels>2000 2000</pixels>
+    <background>255 255 255</background>
+    <color id="1" rgb="255 218 185" />
+    <color id="2" rgb="255 255 255" />
+    <color id="3" rgb="101 101 101" />
+    <color id="5" rgb="0 0 0" />
+    <color id="6" rgb="0 0 0" />
+    <color id="7" rgb="201 201 201" />
+    <color id="9" rgb="255 0 0" />
+    <color id="10" rgb="198 226 255" />
+    <color id="11" rgb="0 255 0" />
+    <color id="12" rgb="142 35 35" />
+    <color id="13" rgb="255 215 0" />
+    <color id="14" rgb="0 0 128" />
+  </plot>
+  <!--assembly no spacer cell-->
+  <plot basis="xy" color_by="cell" filename="assm_no_spacer_cell" id="5" type="slice">
+    <origin>0.0 0.0 90.0</origin>
+    <width>32.25546 32.25546</width>
+    <pixels>2000 2000</pixels>
+    <background>255 255 255</background>
+  </plot>
+  <!--z slice-->
+  <plot basis="xz" color_by="cell" filename="assm_xz" id="6" type="slice">
+    <origin>0.0 0.0 141.61599999999999</origin>
+    <width>32.25546 283.23199999999997</width>
+    <pixels>455 4000</pixels>
+  </plot>
+</plots>
