@@ -166,12 +166,10 @@ DE History:
 
 After searching for 30 generations: 
 
-* JAYA found the best combination of control rod insertion depths is [281.16951924 334.89014362  90.18330327 299.00796372], and its absolute error is 6.63e-06(with the goal k-eff=1.0)
-* DE find combination is [32.51209409591024, 359.634, 141.91959001818773, 355.32843192667775] whose absolute eoor is 1.98e-05
+* JAYA found the best combination of control rod insertion depths is [281.16951924 334.89014362  90.18330327 299.00796372], and its  absolute error is 6.63e-06(with the goal k-eff=1.0)
+* DE found the best combination is [32.51209409591024, 359.634, 141.91959001818773, 355.32843192667775], whose absolute error is 1.98e-05
 
 JAYA has a high search efficiency during the search process, for the result in generation 8 is already pretty good.  
-
-
 
 ## Reference
 
