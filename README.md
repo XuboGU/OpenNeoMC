@@ -24,7 +24,7 @@ conda search openmc
 Create a new virtual environment named openneomc
 
 ```shell
-conda create -n openneomc openmc
+conda create -n openneomc openmc python=3.7
 ```
 
 #### Test OpenMC
@@ -37,7 +37,7 @@ You may encounter the [no cross_sections.xml error]( https://github.com/openmc-d
 
 **Download cross section data**
 
-Various cross section data are available on the  [OpenMC official website](https://openmc.org/data-libraries/), from the OpenMC team, LANL, etc. In OpenNeoMC, we use [ENDF/B-VII.1](ENDF/B-VII.1) in default. But if you have specific purpose, you can use other data that you need. 
+Various cross section data are available on the  [OpenMC official website](https://openmc.org/data-libraries/), from the OpenMC team, LANL, etc. In OpenNeoMC, we use [ENDF/B-VII.1](https://openmc.org/official-data-libraries/) in default. But if you have specific purpose, please feel free to use other nuclear data that you need. 
 
 After downloading the cross-section data file, configure it as an environmental variable as follows. 
 
@@ -62,27 +62,11 @@ source ~/.bashrc
 
 ### Install NEORL
 
-Install python 3.7 to make sure the stable run of tensorflow-1.14.0 
-
 ```shell
-conda install python=3.7 
+pip install neorl
 ```
 
-```shell
-pip install neorl==1.6
-```
-
-Check the version of sciki-learn, if it is 1.x, downgrade the scikit-learn version to 0.24.2
-
-```shell
-# check version
-python -c 'import sklearn; print(sklearn.__version__)'
-
-# downgrade the sklearn version if necessary
-pip install scikit-learn==0.24.2
-```
-
-Check if you have install NEORL successfully by unit test.
+Check if you have install NEORL successfully by input the following command in the terminal.
 
 ```SHELL
 neorl
@@ -90,18 +74,24 @@ neorl
 
 If you see the 'NEORL' logo, then you have prepared the OpenNeoMC framework, congratulations! 
 
+Note: you could also have a comprehensive test of NEORL by running the following command (this is time-consuming).
+
+```shell
+neorl --test
+```
+
+
+
 #### Test OpenNeoMC
 
-Let's test OpenNeoMC by the  'pin_cell_test.py' example. 
-
-Remember to configure environmental variables as above! 
+Let's test OpenNeoMC by the  'pin_cell_test.py' example (Remember to configure environmental variables as above). 
 
 ```shell
 # run 
 python pin_cell_test.py
 ```
 
-If you see the 'NEORL' logo and the log information of OpenMC, then congratulations! 
+If you see the 'NEORL' logo and the log information of OpenMC, then congratulations, you could start your journey of OpenNeoMC! 
 
 ### Installing OpenNeoMC with Docker on Linux/Mac/Windows 
 
@@ -154,7 +144,7 @@ sudo docker image rm 489368492/openneomc
 
 #### Test OpenNeoMC 
 
-Let's test OpenNeoMC by the  'pin_cell_test.py' example, which can be found at /home
+Let's test OpenNeoMC by the  'pin_cell_test.py' example, which can be found at the path '/home'
 
 ```shell
 # cd /home
@@ -164,7 +154,7 @@ cd /home
 python pin_cell_test.py
 ```
 
-If you see the 'NEORL' logo and the log information of OpenMC, then congratulations! 
+If you see the 'NEORL' logo and the log information of OpenMC, then congratulations, you have successfully run OpenNeoMC in docker way.
 
 The program runs around 3 minutes(may vary depending on your CPU), and the results are like:
 
