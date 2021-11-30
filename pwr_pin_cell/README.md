@@ -27,6 +27,7 @@ Here we call the [JAYA](https://neorl.readthedocs.io/en/latest/modules/jaya.html
 @Email   :   guxubo@alumni.sjtu.edu.cn
 '''
 # here put the import lib
+
 import openmc
 from neorl import JAYA
 import os
@@ -54,13 +55,13 @@ def pwr_pin_cell(U_enrich):
     """
     model = openmc.model.Model()
 
-    # Define materials.
-    fuel = openmc.Material(name='UO2')
-    fuel.set_density('g/cm3', 10.29769)
-    fuel.add_element('U', 1.0, enrichment=U_enrich)
-    fuel.add_element('O', 2.0)
+    # Define materials
+    fuel = openmc.Material(name='UO2') # 'UO2' fuel
+    fuel.set_density('g/cm3', 10.29769) # add fuel's density infomation 
+    fuel.add_element('U', 1.0, enrichment=U_enrich) # add Uranium element
+    fuel.add_element('O', 2.0) # add Oxygen element
 
-    clad = openmc.Material(name='Zircaloy')
+    clad = openmc.Material(name='Zircaloy') 
     clad.set_density('g/cm3', 6.55)
     clad.add_nuclide('Zr90', 2.1827e-2)
     clad.add_nuclide('Zr91', 4.7600e-3)
@@ -80,34 +81,34 @@ def pwr_pin_cell(U_enrich):
     model.materials = (fuel, clad, hot_water)
 
     # Instantiate ZCylinder surfaces
-    pitch = 1.26
-    fuel_or = openmc.ZCylinder(x0=0, y0=0, r=0.39218, name='Fuel OR')
-    clad_or = openmc.ZCylinder(x0=0, y0=0, r=0.45720, name='Clad OR')
-    left = openmc.XPlane(x0=-pitch/2, name='left', boundary_type='reflective')
-    right = openmc.XPlane(x0=pitch/2, name='right', boundary_type='reflective')
+    pitch = 1.26 # in `cm`
+    fuel_or = openmc.ZCylinder(x0=0, y0=0, r=0.39218, name='Fuel OR') # fuel outer radius
+    clad_or = openmc.ZCylinder(x0=0, y0=0, r=0.45720, name='Clad OR') # clad outer radius
+    left = openmc.XPlane(x0=-pitch/2, name='left', boundary_type='reflective') # left boundary
+    right = openmc.XPlane(x0=pitch/2, name='right', boundary_type='reflective') # right boundary
     bottom = openmc.YPlane(y0=-pitch/2, name='bottom',
-                           boundary_type='reflective')
-    top = openmc.YPlane(y0=pitch/2, name='top', boundary_type='reflective')
+                           boundary_type='reflective') # bottom boundary
+    top = openmc.YPlane(y0=pitch/2, name='top', boundary_type='reflective') # top boundary
 
     # Instantiate Cells
-    fuel_pin = openmc.Cell(name='Fuel', fill=fuel)
-    cladding = openmc.Cell(name='Cladding', fill=clad)
-    water = openmc.Cell(name='Water', fill=hot_water)
+    fuel_pin = openmc.Cell(name='Fuel', fill=fuel) # fuel pin cell
+    cladding = openmc.Cell(name='Cladding', fill=clad) # cladding cell
+    water = openmc.Cell(name='Water', fill=hot_water) # water cell
 
     # Use surface half-spaces to define regions
-    fuel_pin.region = -fuel_or
-    cladding.region = +fuel_or & -clad_or
-    water.region = +clad_or & +left & -right & +bottom & -top
+    fuel_pin.region = -fuel_or # fuel pin cell's region
+    cladding.region = +fuel_or & -clad_or # cladding cell'region 
+    water.region = +clad_or & +left & -right & +bottom & -top # water cell's region
 
     # Create root universe
-    model.geometry.root_universe = openmc.Universe(0, name='root universe')
-    model.geometry.root_universe.add_cells([fuel_pin, cladding, water])
+    model.geometry.root_universe = openmc.Universe(0, name='root universe') # define the root universe
+    model.geometry.root_universe.add_cells([fuel_pin, cladding, water]) # add cells to the root universe
 
-    model.settings.batches = 150
-    model.settings.inactive = 30
-    model.settings.particles = 10000
+    model.settings.batches = 150 # OpenMC total calculating batches
+    model.settings.inactive = 30 # the first 30 batches are inactive 
+    model.settings.particles = 10000 # number of simulation particles
     model.settings.source = openmc.Source(space=openmc.stats.Box(
-        [-pitch/2, -pitch/2, -1], [pitch/2, pitch/2, 1], only_fissionable=True))
+        [-pitch/2, -pitch/2, -1], [pitch/2, pitch/2, 1], only_fissionable=True)) # define the source
 
     return model
 
@@ -120,9 +121,9 @@ def FIT(x):
     model = pwr_pin_cell(U_enrich=x[0])
     result_r = model.run(output=False)
     sp = openmc.StatePoint(result_r)
-    k_combined = sp.k_combined
-    k_combined_nom = k_combined.nominal_value
-    k_combined_stddev = k_combined.std_dev
+    k_combined = sp.k_combined # the combined k-eff
+    k_combined_nom = k_combined.nominal_value # the nominal value of k-eff
+    k_combined_stddev = k_combined.std_dev # the standard deviation of k-eff
     return_val = abs(k_combined_nom - 1.10) # fitness = k_combined - k_target 
 
     return return_val
