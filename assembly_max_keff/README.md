@@ -255,19 +255,7 @@ Best individual (x) found: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1
 
 The following figure showes the converge curve of Differential Evolution. It showes that the algorithm find the best combination at around generation 300.  The best k-eff found is 0.20112. 
 
-
-
-<center>    
-    <img style="border-radius: 0.3125em;    
-    box-shadow: 0 2px 4px 0 rgba(34,36,38,.12),0 2px 10px 0 rgba(34,36,38,.08);"     
-    src=".\pics\output_de.png">    
-    <br>    
-    <div style="color:orange; border-bottom: 1px solid #d9d9d9;    
-    display: inline-block;    
-    color: #999;    
-   	padding: 2px;">The k-eff at every generation</div> 
-</center>
-
+<img src=".\pics\output_de.png" alt="converge curve" style="zoom:120%;" />
 
 
 The geometry of the best solution is shown in the following figure, where a good circle is found. This result coincides with the benchmark.
