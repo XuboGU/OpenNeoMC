@@ -38,12 +38,11 @@ The reason the authors set X and Y directions of the model as void boundary cond
 
 The optimization objective of this case is to find the optimal geometric configuration to maximize k-eff using limited amount of fuel-moderator materials in this 11 X 11 geometry. To be more specific, one needs to determine which material (1 or 2) to fill in every voxel of the geometry. 
 
-In this case, we use up to 61 fuel pins to fill the assembly and need to find the optimal geometric configuration to make the k-eff max. Equation (1) is the math definition of the problem. Where $p_i = 0$ represents the void pin and $p_i = 1$ represents the fuel pin.
+In this case, we use up to 61 fuel pins to fill the assembly and need to find the optimal geometric configuration to make the k-eff max. Equation (1) is the math definition of the problem. Where $(p_i = 0)$ represents the void pin and $(p_i = 1)$ represents the fuel pin.
 
 $$
 \begin{equation} 
 \begin{aligned} 
-
 max_{\vec p}f(\vec p), \\
 subject \ to,\\ 
 \sum_ip_i\leq61, \\
