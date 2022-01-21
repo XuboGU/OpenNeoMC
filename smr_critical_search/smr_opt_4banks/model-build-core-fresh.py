@@ -1,6 +1,8 @@
 import numpy as np
 import os
 import time
+import shutil
+import random
 
 import openmc
 from smr.materials import materials
@@ -10,22 +12,31 @@ from smr.core import core_geometry
 from smr import inlet_temperature
 from neorl import JAYA, DE, MFO
 
-start = time.time()
+start = time.time() # starting time
+curpath = os.getcwd() # get current working path
+print('Current working path:', curpath)
 
-# os.environ['OPENMC_CROSS_SECTIONS'] = '/home/adt/neorl/openmc/endfb71_hdf5/cross_sections.xml'
+## Configure enviromental variable here ## 
+os.environ['OPENMC_CROSS_SECTIONS'] = '/home/super/nuclear_data/endfb71_hdf5/cross_sections.xml'
+
 
 def smr(CRs):
     '''Build the SMR model
 
     param CRs: list of insertion depths for bank A,B,C and D 
     '''
-    multipole = False
-    rings, axial, depleted = 10, 196, False
+
+    # rings: Number of annular regions in fuel 
+    # axial: Number of axial subdivisions in fuel
+    # depleted: Whether UO2 compositions should represent depleted fuel
+    rings, axial, depleted = 10, 196, False 
 
     model = openmc.model.Model()
 
+    # build geometry 
     model.geometry = core_geometry(rings, axial, depleted, CRs)
 
+    # set materials
     all_materials = model.geometry.get_all_materials()
     model.materials = openmc.Materials(all_materials.values())
 
@@ -35,22 +46,20 @@ def smr(CRs):
     source = openmc.source.Source(space=openmc.stats.Box(lower_left, upper_right))
     source.space.only_fissionable = True
 
+    # 
     model.settings = openmc.Settings()
-    model.settings.batches = 150
-    model.settings.inactive = 30
-    model.settings.particles = 10000
-    model.settings.output = {'tallies': False, 'summary': False}
+    model.settings.batches = 150 # OpenMC total calculating batches
+    model.settings.inactive = 30 # the first 30 batches are inactive 
+    model.settings.particles = 10000 # number of simulation particles
+    # model.settings.output = {'tallies': False, 'summary': False}
     model.settings.source = source
-    model.settings.sourcepoint_write = False
+    # model.settings.sourcepoint_write = False
 
-    model.settings.temperature = {
-        'default': inlet_temperature,
-        'method': 'interpolation',
+    model.settings.temperature = { # Define default temperature and method 
+        'default': inlet_temperature, # for treating intermediate temperatures
+        'method': 'interpolation', #  at which nuclear data doesn’t exist
         'range': (300.0, 1500.0),
     }
-    if multipole:
-        model.settings.temperature['multipole'] = True
-        model.settings.temperature['tolerance'] = 1000
 
     return model
 
@@ -59,13 +68,23 @@ def smr(CRs):
 # Define the fitness function
 def FIT(x):
 
+    # create a subfold for parallel computing
+    randnum = random.randint(0,1e8) # create a random number 
+    pathname = os.path.join(curpath, 'subfold_'+str(randnum)) # create subfold 
+    os.makedirs(pathname) 
+    os.chdir(pathname) # change working dir into the subfold
+
+    # OpenMC calculation
     model = smr(CRs=x)
-    result_r = model.run(output=False, threads=16)
-    sp = openmc.StatePoint(result_r)
-    k_combined = sp.k_combined
-    k_combined_nom = k_combined.nominal_value
-    k_combined_stddev = k_combined.std_dev
-    return_val = abs(k_combined_nom - 1.0) 
+    result_r = model.run(output=True) # path of h5 file
+    sp = openmc.StatePoint(result_r) # State information on a simulation
+    k_combined = sp.k_combined # the combined k-eff
+    k_combined_nom = k_combined.nominal_value # the nominal value of k-eff
+    k_combined_stddev = k_combined.std_dev # the standard deviation of k-eff
+    return_val = abs(k_combined_nom - 1.0)  # fitness = k_combined - k_target 
+
+    # remove the subfold to free space
+    shutil.rmtree(pathname) 
 
     return return_val
 
@@ -76,7 +95,7 @@ for i in range(1,nx+1):
     BOUNDS['x'+str(i)]=['float', 0, 359.634]
 
 # use JAYA to find the optimal U enrichment
-jaya=JAYA(mode='min', bounds=BOUNDS, fit=FIT, npop=10, ncores=1, seed=100)
+jaya=JAYA(mode='min', bounds=BOUNDS, fit=FIT, npop=10, ncores=10, seed=100)
 x_best, y_best, jaya_hist=jaya.evolute(ngen=30, verbose=1)
 print('---JAYA Results---', )
 print('x:', x_best)

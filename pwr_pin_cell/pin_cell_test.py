@@ -6,16 +6,20 @@
 @Email   :   guxubo@alumni.sjtu.edu.cn
 '''
 # here put the import lib
+import os
+import time
+import random 
+import shutil
 
 import openmc
 from neorl import JAYA
-import os
-import time
 
-start = time.time()
+start = time.time() # starting time
+curpath = os.getcwd() # get current working path
+print('Current working path:', curpath)
 
 ## Configure enviromental variable here ## 
-# os.environ['OPENMC_CROSS_SECTIONS'] = '/PATH/cross_sections.xml'
+os.environ['OPENMC_CROSS_SECTIONS'] = '/home/super/nuclear_data/endfb71_hdf5/cross_sections.xml'
 
 ## OpenMC pwr pin cell case ##  
 def pwr_pin_cell(U_enrich):
@@ -97,13 +101,23 @@ def pwr_pin_cell(U_enrich):
 def FIT(x):
     """Find the enrichment of U to achieve the wanted k-eff = 1.10
     """
+    # create a subfold for parallel computing
+    randnum = random.randint(0,1e8) # create a random number 
+    pathname = os.path.join(curpath, 'subfold_'+str(randnum)) # create subfold 
+    os.makedirs(pathname) 
+    os.chdir(pathname) # change working dir into the subfold
+
+    # OpenMC calculation
     model = pwr_pin_cell(U_enrich=x[0])
-    result_r = model.run(output=False)
-    sp = openmc.StatePoint(result_r)
+    result_r = model.run(output=True) # path of h5 file
+    sp = openmc.StatePoint(result_r) # State information on a simulation
     k_combined = sp.k_combined # the combined k-eff
     k_combined_nom = k_combined.nominal_value # the nominal value of k-eff
     k_combined_stddev = k_combined.std_dev # the standard deviation of k-eff
     return_val = abs(k_combined_nom - 1.10) # fitness = k_combined - k_target 
+
+    # remove the subfold to free space
+    shutil.rmtree(pathname) 
 
     return return_val
 
@@ -114,7 +128,7 @@ for i in range(1,nx+1):
     BOUNDS['x'+str(i)]=['float', 0.0, 4.0]
 
 # use JAYA to find the optimal U enrichment
-jaya=JAYA(mode='min', bounds=BOUNDS, fit=FIT, npop=10, ncores=1, seed=100)
+jaya=JAYA(mode='min', bounds=BOUNDS, fit=FIT, npop=8, ncores=8, seed=100)
 x_best, y_best, jaya_hist=jaya.evolute(ngen=5, verbose=1)
 print('---JAYA Results---', )
 print('x:', x_best)

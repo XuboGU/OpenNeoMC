@@ -1,12 +1,26 @@
+# -*- encoding: utf-8 -*-
+'''
+@File    :   assembly_final.py
+@Time    :   2022/01/21 20:57:46
+@Author  :   Xubo GU 
+@Email   :   guxubo@alumni.sjtu.edu.cn
+'''
+
+# here put the import lib
 import numpy as np
 import os
 import time
+import shutil
+import random
 
 from neorl import DE  # JAYA,MFO,PSO,HHO
 import openmc
 
-start = time.time()
+start = time.time() # starting time
+curpath = os.getcwd() # get current working path
+print('Current working path:', curpath)
 
+## Configure enviromental variable here ## 
 os.environ['OPENMC_CROSS_SECTIONS'] = '/home/super/nuclear_data/endfb71_hdf5/cross_sections.xml'
 
 assm_width = 22
@@ -121,10 +135,16 @@ def pwr_assembly(void_loc_x=np.array([]), void_loc_y=np.array([])):
 # Define the fitness function
 def FIT(arr):
 
+    # create a subfold for parallel computing
+    randnum = random.randint(0,1e8) # create a random number 
+    pathname = os.path.join(curpath, 'subfold_'+str(randnum)) # create subfold 
+    os.makedirs(pathname) 
+    os.chdir(pathname) # change working dir into the subfold
+
+    # get locations of void pin 
     total_pin = 121 # the assembly has 121 pins totally
     fuel_limit = 61 # limit of fuel units
-
-    list_x, list_y = [], [] # store locations of void pin
+    list_x, list_y = [], [] # store x/y locations of void pin
     for idx, val in enumerate(arr):
         row, col = idx//11, idx%11 # pin location-(row, col) in the assembly
         if val == 0: # void pin
@@ -132,9 +152,10 @@ def FIT(arr):
             list_y.append(col)
     lx = np.array(list_x)
     ly = np.array(list_y)
+
+    # OpenMC calculation
     model = pwr_assembly(void_loc_x=lx, void_loc_y=ly)
-    
-    # in case the program interrupted due to all neutrons leak, use try-except
+    # use try-except in case that all neutrons leak and the program interupts
     try: 
         result_r = model.run(output=True, threads=128)
 
@@ -153,6 +174,9 @@ def FIT(arr):
         print('All neutrons leak')
         return 0.0
 
+    # remove the subfold to free space
+    shutil.rmtree(pathname) 
+
     return np.round(return_val,5)
 
 # Setup the parameter space(enrichment of U belongs to[0,4.0])
@@ -163,7 +187,7 @@ for i in range(1,nx+1):
 
 
 # setup and evolute DE
-de=DE(mode='max', bounds=BOUNDS, fit=FIT, npop=50, F=0.5, CR=0.3,  ncores=1, seed=100)
+de=DE(mode='max', bounds=BOUNDS, fit=FIT, npop=50, F=0.5, CR=0.3,  ncores=8, seed=100)
 x_best, y_best, de_hist=de.evolute(ngen=400, x0=None, verbose=1)
 print('---DE Results---', )
 print('x:', x_best)
