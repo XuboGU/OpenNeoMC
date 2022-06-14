@@ -1,11 +1,3 @@
-# -*- encoding: utf-8 -*-
-'''
-@File    :   assembly_final.py
-@Time    :   2022/01/21 20:57:46
-@Author  :   Xubo GU 
-@Email   :   guxubo@alumni.sjtu.edu.cn
-'''
-
 # here put the import lib
 import numpy as np
 import os
@@ -23,7 +15,8 @@ print('Current working path:', curpath)
 ## Configure enviromental variable here ## 
 os.environ['OPENMC_CROSS_SECTIONS'] = '/home/super/nuclear_data/endfb71_hdf5/cross_sections.xml'
 
-assm_width = 22
+assm_width = 22 * (100/22) # width of the assembly 
+U_enrich = 5  # enrichment of fuel pin
 
 def pwr_assembly(void_loc_x=np.array([]), void_loc_y=np.array([])):
     """Create a PWR assembly model.
@@ -43,12 +36,10 @@ def pwr_assembly(void_loc_x=np.array([]), void_loc_y=np.array([])):
     model = openmc.model.Model()
 
     # Define materials
-    fuel = openmc.Material(name='Fuel')  # UO2 fuel 
-    fuel.set_density('g/cm3', 10.29769)
-    fuel.add_nuclide('U234', 4.4843e-6)
-    fuel.add_nuclide('U235', 5.5815e-4)
-    fuel.add_nuclide('U238', 2.2408e-2)
-    fuel.add_nuclide('O16', 4.5829e-2)
+    fuel = openmc.Material(name='Fuel') # 'UO2' fuel
+    fuel.set_density('g/cm3', 10.29769) # add fuel's density infomation 
+    fuel.add_element('U', 1.0, enrichment=U_enrich) # add Uranium element
+    fuel.add_element('O', 2.0) # add Oxygen element
 
     clad = openmc.Material(name='Cladding') # Zr cladding
     clad.set_density('g/cm3', 6.55)
@@ -70,8 +61,8 @@ def pwr_assembly(void_loc_x=np.array([]), void_loc_y=np.array([])):
     model.materials = (fuel, clad, hot_water)
 
     # Instantiate ZCylinder surfaces
-    fuel_or = openmc.ZCylinder(x0=0, y0=0, r=0.75, name='Fuel OR')
-    clad_or = openmc.ZCylinder(x0=0, y0=0, r=0.85, name='Clad OR')
+    fuel_or = openmc.ZCylinder(x0=0, y0=0, r=0.75*(100/22), name='Fuel OR')
+    clad_or = openmc.ZCylinder(x0=0, y0=0, r=0.85*(100/22), name='Clad OR')
 
     # Create boundary planes to surround the geometry
     pitch = assm_width
@@ -130,7 +121,6 @@ def pwr_assembly(void_loc_x=np.array([]), void_loc_y=np.array([])):
 
     return model
 
-
 ## call NEORL to find the optimal geometry config to max k-eff ## 
 # Define the fitness function
 def FIT(arr):
@@ -179,15 +169,14 @@ def FIT(arr):
 
     return np.round(return_val,5)
 
-# Setup the parameter space(enrichment of U belongs to[0,4.0])
+
 nx=121
 BOUNDS={}
 for i in range(1,nx+1):
     BOUNDS['x'+str(i)]=['int', 0, 1]
 
-
 # setup and evolute DE
-de=DE(mode='max', bounds=BOUNDS, fit=FIT, npop=50, F=0.5, CR=0.3,  ncores=8, seed=100)
+de=DE(mode='max', bounds=BOUNDS, fit=FIT, npop=50, F=0.5, CR=0.3,  ncores=2, seed=100)
 x_best, y_best, de_hist=de.evolute(ngen=400, x0=None, verbose=1)
 print('---DE Results---', )
 print('x:', x_best)
@@ -199,4 +188,82 @@ print('running time:\n', running_time)
 
 
 
+######################  symmetric geometry ############################
+# # Define the fitness function
+# def FIT_sym(arr):
 
+#     # create a subfold for parallel computing
+#     randnum = random.randint(0,1e8) # create a random number 
+#     pathname = os.path.join(curpath, 'subfold_'+str(randnum)) # create subfold 
+#     os.makedirs(pathname) 
+#     os.chdir(pathname) # change working dir into the subfold
+
+#     total_pin = 121 # the assembly has 121 pins totally
+#     fuel_limit = 61 # limit of fuel units
+
+#     list_x, list_y = [], [] # store locations of void pin
+#     for idx, val in enumerate(arr):
+#         row, col = idx//6, idx%6 # pin location-(row, col) in the assembly
+#         if val == 0: # void pin
+#             list_x.append(row)
+#             list_y.append(col)
+
+#     list_x2, list_y2 = list_x.copy(), list_y.copy()
+#     for i,j in zip(list_x, list_y):
+#         # left/right symmetry
+#         if j!=5:
+#             j_sym = 10-j
+#             list_x2.append(i)
+#             list_y2.append(j_sym)
+    
+#     list_x3, list_y3 = list_x2.copy(), list_y2.copy()
+#     for i,j in zip(list_x2, list_y2):
+#         # up/down symmetry
+#         if i!=5:
+#             i_sym = 10-i
+#             list_x3.append(i_sym)
+#             list_y3.append(j)
+
+#     lx = np.array(list_x3)
+#     ly = np.array(list_y3)
+
+#     model = pwr_assembly(void_loc_x=lx, void_loc_y=ly)
+    
+#     # in case the program interrupted due to all neutrons leak, use try-except
+#     try: 
+#         result_r = model.run(output=True, threads=128)
+#         sp = openmc.StatePoint(result_r)
+#         k_combined = sp.k_combined
+#         k_combined_nom = k_combined.nominal_value
+#         k_combined_stddev = k_combined.std_dev
+
+#         # penalty of over-use fuel
+#         penalty = -1e5
+#         used_fuel = total_pin - len(lx)
+#         if used_fuel > fuel_limit: return_val = k_combined_nom + penalty
+#         else: return_val = k_combined_nom
+
+#     except:  
+#         print('All neutrons leak')
+#         return 0.0
+
+#     # remove the subfold to free space
+#     shutil.rmtree(pathname) 
+
+#     return np.round(return_val,5)
+
+# nx_sym=6*6 
+# BOUNDS_sym={}
+# for i in range(1,nx_sym+1):
+#     BOUNDS_sym['x'+str(i)]=['int', 0, 1]
+
+# # setup and evolute DE
+# de=DE(mode='max', bounds=BOUNDS_sym, fit=FIT_sym, npop=50, F=0.5, CR=0.3,  ncores=2, seed=100)
+# x_best, y_best, de_hist=de.evolute(ngen=400, x0=None, verbose=1)
+# print('---DE Results---', )
+# print('x:', x_best)
+# print('y:', y_best)
+# print('DE History:\n', de_hist)
+# end = time.time()
+# running_time = end - start
+# print('running time:\n', running_time)
