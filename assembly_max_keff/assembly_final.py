@@ -13,7 +13,7 @@ curpath = os.getcwd() # get current working path
 print('Current working path:', curpath)
 
 ## Configure enviromental variable here ## 
-os.environ['OPENMC_CROSS_SECTIONS'] = '/home/super/nuclear_data/endfb71_hdf5/cross_sections.xml'
+os.environ['OPENMC_CROSS_SECTIONS'] = '/home/xubo/OpenNeoMC/endfb71_hdf5/cross_sections.xml'
 
 assm_width = 22 * (100/22) # width of the assembly 
 U_enrich = 5  # enrichment of fuel pin
@@ -128,7 +128,7 @@ def FIT(arr):
     # create a subfold for parallel computing
     randnum = random.randint(0,1e8) # create a random number 
     pathname = os.path.join(curpath, 'subfold_'+str(randnum)) # create subfold 
-    os.makedirs(pathname) 
+    os.makedirs(pathname, exist_ok=True) 
     os.chdir(pathname) # change working dir into the subfold
 
     # get locations of void pin 
@@ -168,7 +168,6 @@ def FIT(arr):
     shutil.rmtree(pathname) 
 
     return np.round(return_val,5)
-
 
 nx=121
 BOUNDS={}

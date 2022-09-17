@@ -14,29 +14,51 @@ In OpenNeoMC, we combine these two open-source tools to empower particle transpo
 
 Please install conda before proceeding,  it will bring you convenience to install [anaconda](https://www.anaconda.com/products/individual#Downloads) directly, which includes conda and other necessary python  packages.
 
-#### Install OpenMC
+Create a new virtual environment named openneomc with python3.7 (python3.7 is requied for compatibility purposes)
 
 ```shell
-conda config --add channels conda-forge
-conda search openmc
-```
+conda create -n openneomc python=3.7
 
-Create a new virtual environment named openneomc
+# activate the virtual environment 
+conda activate openneomc  
+```
+### Install NEORL
 
 ```shell
-conda create -n openneomc openmc python=3.7
+pip install neorl
 ```
 
-#### Test OpenMC
+Check if you have install NEORL successfully by input the following command in the terminal.
 
-Follow with the [official examples]( https://docs.openmc.org/en/stable/examples/index.html) to test the OpenMC
+```SHELL
+neorl
+```
+
+If you see the 'NEORL' logo, then you have prepared the OpenNeoMC framework, congratulations! 
+
+Note: you could also have a comprehensive test of NEORL by running the following command (this is time-consuming).
+
+```shell
+neorl --test
+```
+
+#### Install OpenMC of Version 0.12.2 
+Refer to [OpenMC installation](https://docs.openmc.org/en/v0.13.1/quickinstall.html#installing-from-source-on-linux-or-mac-os-x) 
+
+```shell
+git clone --branch v0.12.2 https://github.com/openmc-dev/openmc.git
+cd openmc
+mkdir build && cd build
+cmake ..
+make
+sudo make install
+cd .. && pip install .
+```
 
 **Cross Section Configuration**
-
 You may encounter the [no cross_sections.xml error]( https://github.com/openmc-dev/openmc/issues/1855) when running OpenMC. This is caused by the missing of nuclear data, you could solve it refer to [Cross Section Configuration](https://docs.openmc.org/en/stable/usersguide/cross_sections.html)
 
 **Download cross section data**
-
 Various cross section data are available on the  [OpenMC official website](https://openmc.org/data-libraries/), from the OpenMC team, LANL, etc. In OpenNeoMC, we use [ENDF/B-VII.1](https://openmc.org/official-data-libraries/) in default. But if you have specific purpose, please feel free to use other nuclear data that you need. 
 
 After downloading the cross-section data file, configure it as an environmental variable as follows. 
@@ -59,27 +81,6 @@ export OPENMC_CROSS_SECTIONS=/PATH/cross_sections.xml
 # update 
 source ~/.bashrc
 ```
-
-### Install NEORL
-
-```shell
-pip install neorl
-```
-
-Check if you have install NEORL successfully by input the following command in the terminal.
-
-```SHELL
-neorl
-```
-
-If you see the 'NEORL' logo, then you have prepared the OpenNeoMC framework, congratulations! 
-
-Note: you could also have a comprehensive test of NEORL by running the following command (this is time-consuming).
-
-```shell
-neorl --test
-```
-
 
 
 #### Test OpenNeoMC
@@ -176,11 +177,11 @@ running time:
 
 OpenMC: https://docs.openmc.org/en/stable
 
-OpenMC image: https://hub.docker.com/r/openmc/openmc
+OpenMC docker image: https://hub.docker.com/r/openmc/openmc
 
 NEORL: https://neorl.readthedocs.io/en/latest/
 
-OpenNeoMC image: https://hub.docker.com/r/489368492/openneomc 
+OpenNeoMC docker image: https://hub.docker.com/r/489368492/openneomc 
 
 ## Contact 
 

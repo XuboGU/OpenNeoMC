@@ -19,7 +19,7 @@ curpath = os.getcwd() # get current working path
 print('Current working path:', curpath)
 
 ## Configure enviromental variable here ## 
-os.environ['OPENMC_CROSS_SECTIONS'] = '/home/super/nuclear_data/endfb71_hdf5/cross_sections.xml'
+os.environ['OPENMC_CROSS_SECTIONS'] = '/home/xubo/OpenNeoMC/endfb71_hdf5/cross_sections.xml'
 
 ## OpenMC pwr pin cell case ##  
 def pwr_pin_cell(U_enrich):
@@ -97,14 +97,16 @@ def pwr_pin_cell(U_enrich):
 
 
 ## call NEORL to find the optimal enrichment ## 
+ncores = 2 # parallel computing number
 # Define the fitness function
 def FIT(x):
     """Find the enrichment of U to achieve the wanted k-eff = 1.10
     """
+
     # create a subfold for parallel computing
     randnum = random.randint(0,1e8) # create a random number 
     pathname = os.path.join(curpath, 'subfold_'+str(randnum)) # create subfold 
-    os.makedirs(pathname) 
+    os.makedirs(pathname, exist_ok=True) 
     os.chdir(pathname) # change working dir into the subfold
 
     # OpenMC calculation
@@ -128,7 +130,7 @@ for i in range(1,nx+1):
     BOUNDS['x'+str(i)]=['float', 0.0, 4.0]
 
 # use JAYA to find the optimal U enrichment
-jaya=JAYA(mode='min', bounds=BOUNDS, fit=FIT, npop=8, ncores=8, seed=100)
+jaya=JAYA(mode='min', bounds=BOUNDS, fit=FIT, npop=8, ncores=ncores, seed=100)
 x_best, y_best, jaya_hist=jaya.evolute(ngen=5, verbose=1)
 print('---JAYA Results---', )
 print('x:', x_best)
