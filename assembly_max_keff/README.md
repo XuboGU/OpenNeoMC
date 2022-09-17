@@ -58,7 +58,7 @@ $$
 
 The possible combinations of filling the assembly can be calculated by eqution (2).
 $$
-\sum_{i=0}^{61} C_{121}^{i} \approx 1.521 \times 10^{36}  \tag 2
+\sum_{i=0}^{61} C_{121}^{i} \approx 1.521 \times 10^{36}  \tag 2
 $$
 This is a quite large number, thus, it's hard to find the optimal configuration. 
 
