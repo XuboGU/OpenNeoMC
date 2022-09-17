@@ -53,16 +53,17 @@ where \ p_i = 0 \ or \ p_i = 1
 $$
 
 
-
 **Possible combinations**
 
-The possible combinations of filling the assembly can be calculated by eqution (2).
+The possible combinations of filling the assembly can be calculated by equation (2)
+
 $$
 \begin{equation} 
 \sum_{i=0}^{61} C_{121}^{i} \approx 1.521 \times 10^{36}  
 \tag 2
 \end{equation}
 $$
+
 This is a quite large number, thus, it's hard to find the optimal configuration. 
 
 ### Method
