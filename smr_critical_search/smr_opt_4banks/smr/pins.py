@@ -94,7 +94,7 @@ def make_stack(name, surfaces, universes):
     # Create cells for each axial segment
     for i, (univ, region) in enumerate(zip(universes, subdivide(surfaces))):
         cell_name = '{} ({})'.format(name, i)
-        cell = openmc.Cell(name=cell_name, fill=univ, region=region) # fill 填材料
+        cell = openmc.Cell(name=cell_name, fill=univ, region=region) # fill materials
         universe.add_cell(cell)
 
     return universe

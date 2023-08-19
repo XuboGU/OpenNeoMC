@@ -142,7 +142,7 @@ def assembly_universes(num_rings, num_axial, depleted, CRs):
     univs = {}
 
     # commonly needed universes 
-    gtu = pins['GT empty']   # Guide tube pin cells 导管，空的
+    gtu = pins['GT empty']   # Guide tube pin cells (empty)
     gti = pins['GT empty instr'] 
     bas = pins['BA stack']
     ins = pins['IT stack']  # instrument tube
