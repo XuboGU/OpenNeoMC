@@ -1,21 +1,5 @@
 # OpenNeoMC：an Open-source Tool for Particle Transport Optimization that Combining OpenMC with NEORL
 
-## Citation
-If you use this project in your research, please cite it using the following Bibtex entry:
-```bibtex
-@article{GU2023109450,
-  title = {OpenNeoMC: A framework for design optimization in particle transport simulations based on OpenMC and NEORL},
-  journal = {Annals of Nuclear Energy},
-  volume = {180},
-  pages = {109450},
-  year = {2023},
-  issn = {0306-4549},
-  doi = {https://doi.org/10.1016/j.anucene.2022.109450},
-  url = {https://www.sciencedirect.com/science/article/pii/S0306454922004807},
-  author = {Xubo Gu and Majdi I. Radaideh and Jingang Liang},
-  keywords = {OpenMC, NEORL, Particle transport, Optimization, Criticality search},
-}
-
 [OpenMC](https://docs.openmc.org/en/stable/index.html) is a community-developed Monte Carlo neutron and photon transport simulation code for particle transport. OpenMC was originally developed by members of the [Computational Reactor Physics Group](http://crpg.mit.edu/) at the [Massachusetts Institute of Technology](https://web.mit.edu/) starting in 2011.
 
 [NEORL](https://neorl.readthedocs.io/en/latest/index.html) (**N**euro**E**volution **O**ptimization with **R**einforcement **L**earning) is a set of implementations of hybrid algorithms combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intelligence architectures. NEORL aims to solve large-scale optimization problems relevant to operation & optimization research, engineering, business, and other disciplines. NEORL was established in MIT back in 2020 with feedback, validation, and usage of different colleagues. 
@@ -188,6 +172,22 @@ JAYA History:
 running time:
  155.2281835079193
 ```
+
+## Citation
+If you use this project in your research, please cite it using the following Bibtex entry:
+```bibtex
+@article{GU2023109450,
+  title = {OpenNeoMC: A framework for design optimization in particle transport simulations based on OpenMC and NEORL},
+  journal = {Annals of Nuclear Energy},
+  volume = {180},
+  pages = {109450},
+  year = {2023},
+  issn = {0306-4549},
+  doi = {https://doi.org/10.1016/j.anucene.2022.109450},
+  url = {https://www.sciencedirect.com/science/article/pii/S0306454922004807},
+  author = {Xubo Gu and Majdi I. Radaideh and Jingang Liang},
+  keywords = {OpenMC, NEORL, Particle transport, Optimization, Criticality search},
+}
 
 ## Reference
 
