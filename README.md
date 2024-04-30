@@ -1,5 +1,21 @@
 # OpenNeoMC：an Open-source Tool for Particle Transport Optimization that Combining OpenMC with NEORL
 
+Please cite
+
+@article{GU2023109450,
+title = {OpenNeoMC: A framework for design optimization in particle transport simulations based on OpenMC and NEORL},
+journal = {Annals of Nuclear Energy},
+volume = {180},
+pages = {109450},
+year = {2023},
+issn = {0306-4549},
+doi = {https://doi.org/10.1016/j.anucene.2022.109450},
+url = {https://www.sciencedirect.com/science/article/pii/S0306454922004807},
+author = {Xubo Gu and Majdi I. Radaideh and Jingang Liang},
+keywords = {OpenMC, NEORL, Particle transport, Optimization, Criticality search},
+abstract = {We present a study for particle transport design optimization that combines OpenMC (Monte Carlo transport code) with NEORL (NeuroEvolution Optimization with Reinforcement Learning). The proposed open-source framework, OpenNeoMC, empowers particle transport with state-of-the-art optimization techniques to facilitate design optimization and efficient selection of the simulation settings. The new framework is designed to have great concision and usability in integrating OpenMC into a variety of optimization techniques such as differential evolution, evolution strategies, bat algorithm, ensemble of differential evolution variants, and others. We present two optimization applications, namely criticality search of small modular reactor (SMR) and maximum keff search of a nuclear assembly. The deviation from criticality found by OpenNeoMC can be as small as the order of 1 pcm in the criticality search of SMR. For the second problem, an optimal geometric configuration of the nuclear assembly is found efficiently. The results demonstrate that the framework can be a powerful open-source tool to solve large-scale optimization problems in expensive particle transport simulations, and scalable enough to other Monte Carlo codes.}
+}
+
 [OpenMC](https://docs.openmc.org/en/stable/index.html) is a community-developed Monte Carlo neutron and photon transport simulation code for particle transport. OpenMC was originally developed by members of the [Computational Reactor Physics Group](http://crpg.mit.edu/) at the [Massachusetts Institute of Technology](https://web.mit.edu/) starting in 2011.
 
 [NEORL](https://neorl.readthedocs.io/en/latest/index.html) (**N**euro**E**volution **O**ptimization with **R**einforcement **L**earning) is a set of implementations of hybrid algorithms combining neural networks and evolutionary computation based on a wide range of machine learning and evolutionary intelligence architectures. NEORL aims to solve large-scale optimization problems relevant to operation & optimization research, engineering, business, and other disciplines. NEORL was established in MIT back in 2020 with feedback, validation, and usage of different colleagues. 
