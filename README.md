@@ -173,6 +173,16 @@ running time:
  155.2281835079193
 ```
 
+## Reference
+
+OpenMC: https://docs.openmc.org/en/stable
+
+OpenMC docker image: https://hub.docker.com/r/openmc/openmc
+
+NEORL: https://neorl.readthedocs.io/en/latest/
+
+OpenNeoMC docker image: https://hub.docker.com/r/489368492/openneomc 
+
 ## Citation
 If you use this project in your research, please cite it using the following Bibtex entry:
 ```bibtex
@@ -188,16 +198,7 @@ If you use this project in your research, please cite it using the following Bib
   author = {Xubo Gu and Majdi I. Radaideh and Jingang Liang},
   keywords = {OpenMC, NEORL, Particle transport, Optimization, Criticality search},
 }
-
-## Reference
-
-OpenMC: https://docs.openmc.org/en/stable
-
-OpenMC docker image: https://hub.docker.com/r/openmc/openmc
-
-NEORL: https://neorl.readthedocs.io/en/latest/
-
-OpenNeoMC docker image: https://hub.docker.com/r/489368492/openneomc 
+```
 
 ## Contact 
 
