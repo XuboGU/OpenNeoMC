@@ -184,7 +184,7 @@ NEORL: https://neorl.readthedocs.io/en/latest/
 OpenNeoMC docker image: https://hub.docker.com/r/489368492/openneomc 
 
 ## Citation
-If you use this project in your research, please cite it using the following Bibtex entry:
+To cite this repository in publications:
 ```bibtex
 @article{GU2023109450,
   title = {OpenNeoMC: A framework for design optimization in particle transport simulations based on OpenMC and NEORL},
@@ -198,9 +198,14 @@ If you use this project in your research, please cite it using the following Bib
   author = {Xubo Gu and Majdi I. Radaideh and Jingang Liang},
   keywords = {OpenMC, NEORL, Particle transport, Optimization, Criticality search},
 }
+@article{radaideh2023neorl,
+  title={NEORL: NeuroEvolution Optimization with Reinforcement Learning—Applications to carbon-free energy systems},
+  author={Radaideh, Majdi I and Du, Katelin and Seurin, Paul and Seyler, Devin and Gu, Xubo and Wang, Haijia and Shirvan, Koroush},
+  journal={Nuclear Engineering and Design},
+  volume={412},
+  pages={112423},
+  year={2023},
+  publisher={Elsevier}
+}
 ```
-
-## Contact 
-
-If you have any suggestions or issues, please feel free to contact Xubo Gu(xbgu1024@126.com)
 
